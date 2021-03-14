@@ -1,6 +1,6 @@
 buildscript {
-    ext.kotlinVersion = '1.3.72'
-    ext.navigationVersion = "2.1.0-alpha06"
+    ext.kotlinVersion = '1.4.31'
+    ext.navigationVersion = "2.3.4"
     repositories {
         google()
         jcenter()
@@ -37,26 +37,26 @@ ext {
     // App dependencies
     androidXVersion = '1.0.0'
     androidXTestCoreVersion = '1.2.0'
-    androidXTestExtKotlinRunnerVersion = '1.1.1'
+    androidXTestExtKotlinRunnerVersion = '1.1.2'
     androidXTestRulesVersion = '1.2.0-beta01'
     androidXAnnotations = '1.0.1'
     androidXLegacySupport = '1.0.0'
     appCompatVersion = '1.2.0'
-    archLifecycleVersion = '2.2.0'
+    archLifecycleVersion = '2.3.0'
     archTestingVersion = '2.0.0'
     cardVersion = '1.0.0'
     coroutinesVersion = '1.3.7'
     dexMakerVersion = '2.12.1'
-    espressoVersion = '3.2.0-beta01'
+    espressoVersion = '3.4.0-alpha04'
     fragmentVersion = '1.1.0-alpha07'
-    fragmentKtxVersion = '1.1.0-rc01'
+    fragmentKtxVersion = '1.3.0'
     hamcrestVersion = '1.3'
-    junitVersion = '4.12'
-    materialVersion = '1.0.0'
+    junitVersion = '4.13.2'
+    materialVersion = '1.3.0'
     mockitoVersion = '2.8.9'
-    recyclerViewVersion = '1.0.0'
+    recyclerViewVersion = '1.1.0'
     robolectricVersion = '4.3.1'
-    roomVersion = '2.2.5'
+    roomVersion = '2.2.6'
     rulesVersion = '1.0.1'
     timberVersion = '4.7.1'
     truthVersion = '0.44'

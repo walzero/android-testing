@@ -1,13 +1,11 @@
 package com.example.android.architecture.blueprints.todoapp.tasks
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.architecture.blueprints.todoapp.Event
+import com.example.android.getOrAwaitValue
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.not
-import org.hamcrest.Matchers.nullValue
+import org.hamcrest.Matchers.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,18 +21,21 @@ class TasksViewModelTest {
     fun addNewTask_setsNewTaskEvent() {
         val tasksViewModel = TasksViewModel(ApplicationProvider.getApplicationContext())
 
-        val observer = Observer<Event<Unit>> {}
+        tasksViewModel.addNewTask()
 
-        try {
-            tasksViewModel.newTaskEvent.observeForever(observer)
+        val value = tasksViewModel.newTaskEvent.getOrAwaitValue()
 
-            tasksViewModel.addNewTask()
+        assertThat(value.getContentIfNotHandled(), not(nullValue()))
+    }
 
-            val value = tasksViewModel.newTaskEvent.value
-            assertThat(value?.getContentIfNotHandled(), (not(nullValue())))
+    @Test
+    fun setFilterAllTasks_tasksAddViewVisible() {
+        val tasksViewModel = TasksViewModel(ApplicationProvider.getApplicationContext())
 
-        } finally {
-            tasksViewModel.newTaskEvent.removeObserver(observer)
-        }
+        tasksViewModel.setFiltering(TasksFilterType.ALL_TASKS)
+
+        val value = tasksViewModel.tasksAddViewVisible.getOrAwaitValue()
+
+        assertThat(value, `is`(true))
     }
 }

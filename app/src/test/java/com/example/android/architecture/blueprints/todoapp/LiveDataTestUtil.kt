@@ -1,4 +1,4 @@
-package com.example.android
+package com.example.android.architecture.blueprints.todoapp
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData

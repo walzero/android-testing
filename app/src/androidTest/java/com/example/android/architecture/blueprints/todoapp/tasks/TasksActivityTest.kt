@@ -3,6 +3,7 @@ package com.example.android.architecture.blueprints.todoapp.tasks
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
@@ -14,6 +15,9 @@ import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.ServiceLocator
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
+import com.example.android.architecture.blueprints.todoapp.util.DataBindingIdlingResource
+import com.example.android.architecture.blueprints.todoapp.util.EspressoIdlingResource
+import com.example.android.architecture.blueprints.todoapp.util.monitorActivity
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.not
@@ -28,6 +32,9 @@ class TasksActivityTest {
 
     private lateinit var repository: TasksRepository
 
+    // An idling resource that waits for Data Binding to have no pending bindings.
+    private val dataBindingIdlingResource = DataBindingIdlingResource()
+
     @Before
     fun init() {
         repository = ServiceLocator.provideTasksRepository(getApplicationContext())
@@ -41,6 +48,18 @@ class TasksActivityTest {
         ServiceLocator.resetRepository()
     }
 
+    @Before
+    fun registerIdlingResource() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().register(dataBindingIdlingResource)
+    }
+
+    @After
+    fun unregisterIdlingResource() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
+    }
+
     @Test
     fun editTask() = runBlocking {
         // Set initial state.
@@ -48,6 +67,8 @@ class TasksActivityTest {
 
         // Start up Tasks screen.
         val activityScenario = ActivityScenario.launch(TasksActivity::class.java)
+
+        dataBindingIdlingResource.monitorActivity(activityScenario)
 
         // Click on the task on the list and verify that all the data is correct.
         onView(withText("TITLE1")).perform(click())
